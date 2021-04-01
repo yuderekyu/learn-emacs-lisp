@@ -3,7 +3,9 @@
 ;; Elisp programs are made of symbolic expressions ("sexps"):
 (+ 2 2)
 
-;; this is a comment
+;; From `lisp-interaction-mode' you can evaluate sexps.
+;; Put the cursor right after the closing parenthesis then
+;; hold down the control and hit the j keys ("C-j" for short).
 (+ 3 (+ 1 2))
 
 ;; use setq to store value into a variable
@@ -28,10 +30,12 @@
 ;; switch to a new buffer named *test* in another window
 (switch-to-buffer-other-window "*test*")
 
-;; conbine several sexps with `progn';
+;; combine several sexps with `progn';
 (progn
   (switch-to-buffer-other-window "*test*")
-  (hello "you"))
+  (hello "you")
+  (hello "are")
+  (hello "cool"))
 
 ;; erase buffer
 (progn
@@ -57,11 +61,14 @@
 ;; format string
 (format "Hello %s!\n" "visitor")
 
+;; %s is a place-holder for a string, replaced by "visitor".
+;; \n is the newline character.
+
 ;; refine function
 (defun hello (name)
   (insert (format "Hello %s!\n" name)))
 
-(hello "you")
+(hello "derek yu")
 
 ;; create another function which uses `let':
 (defun greeting (name)
@@ -70,4 +77,32 @@
                    name
                    your-name
                    ))))
+
+;; and evaluate it
 (greeting "you")
+
+;; some fns are interactive
+(read-from-minibuffer "enter your name bb: ")
+
+;; let's make our greeting fn prompt for you name
+(defun greeting (from-name)
+  (let ((your-name (read-from-minibuffer "enter your name bb: ")))
+  (insert (format "hello!\n\nI am %s and you are %s."
+                  from-name
+                  your-name
+                  ))))
+
+(greeting "deeky")
+
+;; complete this by displaying the results on the other window
+(defun greeting (from-name)
+  (let ((your-name (read-from-minibuffer "enter your name bb: ")))
+    (switch-to-buffer-other-window "*test*")
+    (erase-buffer)
+    (insert (format "hello!\n\nI am %s and you are %s."
+                    from-name
+                    your-name
+                    ))
+    (other-window 1)))
+
+(greeting "dory")
